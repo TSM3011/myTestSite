@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مطعم الجود - القائمة</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #fefefe;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+
+    .top-container {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background-color: #b30000;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    header {
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      padding: 10px 20px;
+    }
+
+    .logo {
+	height: 10vw;            
+	max-height: 140px;       
+	min-height: 60px;        
+	max-width: none;
+	object-fit: contain;
+	margin-right: 15px;
+	background-color: white;
+	padding: 5px;
+	border-radius: 8px;
+	box-shadow: 0 0 8px rgba(0,0,0,0.15);
+	display: block;
+	transition: height 0.3s ease;
+	}
+	
+	@media (max-width: 600px) {
+	.logo {
+	margin-right: 10px;
+    height: 12vw;  
+    min-height: 50px;
+	}
+  }
+
+
+    .title {
+      flex-grow: 1;
+      text-align: center;
+      font-size: 26px;
+      font-weight: bold;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      padding: 10px;
+    }
+
+    .toolbar button {
+      background: white;
+      color: #b30000;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      min-width: 120px;
+      flex-grow: 1;
+    }
+
+    .menu-section {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 0 15px;
+    }
+
+    .menu-section h2 {
+      border-bottom: 2px solid #ddd;
+      padding-bottom: 10px;
+      margin-top: 40px;
+      font-size: 24px;
+      scroll-margin-top: 160px;
+    }
+
+    .menu-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+      font-size: 20px;
+    }
+
+    .contact-section {
+      text-align: center;
+      padding: 40px 20px;
+      background-color: #f9f9f9;
+      border-top: 1px solid #ddd;
+    }
+
+    .contact-section h3 {
+      margin-bottom: 20px;
+      font-size: 22px;
+      color: #b30000;
+    }
+
+    .qr-codes {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .qr-codes img {
+      width: 150px;
+      height: 150px;
+      object-fit: contain;
+    }
+  </style>
+  <script>
+    const exchangeRate = 89500;
+    let showUSD = false;
+
+    const menuData = {
+      "صحن زجاج": [
+        ["فول بحامض", 150000],
+        ["فول بطحينة", 150000],
+        ["حب بحامض", 150000],
+        ["حب بطحينة", 150000],
+        ["حمص مدقوق", 150000],
+        ["حمص مدقوق مع نص اوقية لحمة", 280000],
+        ["حمص مدقوق مع اوقية لحمة", 380000],
+        ["فتة", 180000],
+        ["ماليزية", 180000],
+        ["ترويقة بلدية", 150000],
+        ["بيض", 180000]
+      ],
+      "صحن سفري": [
+        ["فول بحامض", 200000],
+        ["فول بطحينة", 200000],
+        ["حب بحامض", 200000]
+      ],
+      "ربع كيلو": [
+        ["فول بحامض", 80000],
+        ["فول بطحينة", 80000],
+        ["حب بحامض", 80000],
+        ["حب بطحينة", 80000],
+        ["حمص مدقوق", 80000]
+      ],
+      "نص كيلو": [
+        ["فول بحامض", 130000],
+        ["فول بطحينة", 130000],
+        ["حب بحامض", 130000],
+        ["حب بطحينة", 130000],
+        ["حمص مدقوق", 130000]
+      ],
+      "كيلو": [
+        ["فول بحامض", 260000],
+        ["فول بطحينة", 260000],
+        ["حب بحامض", 260000],
+        ["حب بطحينة", 260000],
+        ["حمص مدقوق", 260000]
+      ]
+    };
+
+    function toArabicDigits(number) {
+      return number.toString().replace(/[0-9]/g, d =>
+        String.fromCharCode(d.charCodeAt(0) + 0x0660 - 0x0030)).replace(/,/g, '٬');
+    }
+
+    function renderMenu() {
+      const container = document.getElementById("menu-container");
+      container.innerHTML = "";
+      for (const [section, items] of Object.entries(menuData)) {
+        const sectionTitle = document.createElement("h2");
+        sectionTitle.id = section;
+        sectionTitle.textContent = section;
+        container.appendChild(sectionTitle);
+        items.forEach(([name, price]) => {
+          const div = document.createElement("div");
+          div.className = "menu-item";
+          const priceText = showUSD
+            ? `${toArabicDigits((price / exchangeRate).toFixed(2))} $`
+            : `${toArabicDigits(price.toLocaleString())} ل.ل.`;
+          div.innerHTML = `<span>${name}</span><span>${priceText}</span>`;
+          container.appendChild(div);
+        });
+      }
+      document.getElementById("currency-btn").textContent = showUSD ? "عرض بالليرة" : "عرض بالدولار";
+    }
+
+    function toggleCurrency() {
+      showUSD = !showUSD;
+      renderMenu();
+    }
+  </script>
+</head>
+<body onload="renderMenu()">
+  <div class="top-container">
+    <header>
+       <img src="C:\Users\zios\Desktop\Aljoud\IMG_1684 (1).PNG" alt="Al Joud Logo" class="logo">
+      <div class="title">مطعم الجود</div>
+    </header>
+
+    <div class="toolbar">
+      <button onclick="document.getElementById('صحن زجاج').scrollIntoView({ behavior: 'smooth' })">صحن زجاج</button>
+      <button onclick="document.getElementById('صحن سفري').scrollIntoView({ behavior: 'smooth' })">صحن سفري</button>
+      <button onclick="document.getElementById('ربع كيلو').scrollIntoView({ behavior: 'smooth' })">ربع كيلو</button>
+      <button onclick="document.getElementById('نص كيلو').scrollIntoView({ behavior: 'smooth' })">نص كيلو</button>
+      <button onclick="document.getElementById('كيلو').scrollIntoView({ behavior: 'smooth' })">كيلو</button>
+      <button onclick="toggleCurrency()" id="currency-btn">عرض بالدولار</button>
+      <button onclick="window.location.href='english.html'">English</button>
+    </div>
+  </div>
+
+  <div id="menu-container" class="menu-section"></div>
+
+  <div class="contact-section">
+    <h3>تابعونا وتواصلوا معنا</h3>
+    <div class="qr-codes">
+      <img src="C:\Users\zios\Desktop\Aljoud\qr-code (1).png" alt="WhatsApp QR">
+      <img src="C:\Users\zios\Desktop\Aljoud\qr-code.png" alt="Instagram QR">
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Al Joud Restaurant - Menu</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #fefefe;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+
+    .top-container {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background-color: #b30000;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    header {
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      padding: 10px 20px;
+    }
+
+   .logo {
+	height: 10vw;            
+	max-height: 140px;       
+	min-height: 60px;        
+	max-width: none;
+	object-fit: contain;
+	margin-right: 15px;
+	background-color: white;
+	padding: 5px;
+	border-radius: 8px;
+	box-shadow: 0 0 8px rgba(0,0,0,0.15);
+	display: block;
+	transition: height 0.3s ease;
+	}
+	
+	@media (max-width: 600px) {
+	.logo {
+	margin-right: 10px;
+    height: 12vw;  
+    min-height: 50px;
+	}
+  }
+
+    .title {
+      flex-grow: 1;
+      text-align: center;
+      font-size: 26px;
+      font-weight: bold;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      padding: 10px;
+    }
+
+    .toolbar button {
+      background: white;
+      color: #b30000;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      min-width: 120px;
+      flex-grow: 1;
+    }
+
+    .menu-section {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 0 15px;
+    }
+
+    .menu-section h2 {
+      border-bottom: 2px solid #ddd;
+      padding-bottom: 10px;
+      margin-top: 40px;
+      font-size: 24px;
+      scroll-margin-top: 160px;
+    }
+
+    .menu-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+      font-size: 20px;
+    }
+	.contact-section {
+      text-align: center;
+      padding: 40px 20px;
+      background-color: #f9f9f9;
+      border-top: 1px solid #ddd;
+    }
+
+    .contact-section h3 {
+      margin-bottom: 20px;
+      font-size: 22px;
+      color: #b30000;
+    }
+
+    .qr-codes {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .qr-codes img {
+      width: 150px;
+      height: 150px;
+      object-fit: contain;
+    }
+  </style>
+  <script>
+    const exchangeRate = 89500;
+    let showUSD = true;
+    const menuData = {
+      "Glass Plate": [
+        ["Foul with Lemon", 150000],
+        ["Foul with Tahini", 150000],
+        ["Habb with Lemon", 150000],
+        ["Habb with Tahini", 150000],
+        ["Mashed Hummus", 150000],
+        ["Hummus + Half oz Meat", 280000],
+        ["Hummus + 1 oz Meat", 380000],
+        ["Fatteh", 180000],
+        ["Maliziya", 180000],
+        ["Baladi Breakfast", 150000],
+        ["Eggs", 180000]
+      ],
+      "Takeaway Plate": [
+        ["Foul with Lemon", 200000],
+        ["Foul with Tahini", 200000],
+        ["Habb with Lemon", 200000]
+      ],
+      "Quarter Kilo": [
+        ["Foul with Lemon", 80000],
+        ["Foul with Tahini", 80000],
+        ["Habb with Lemon", 80000],
+        ["Habb with Tahini", 80000],
+        ["Mashed Hummus", 80000]
+      ],
+      "Half Kilo": [
+        ["Foul with Lemon", 130000],
+        ["Foul with Tahini", 130000],
+        ["Habb with Lemon", 130000],
+        ["Habb with Tahini", 130000],
+        ["Mashed Hummus", 130000]
+      ],
+      "Kilo": [
+        ["Foul with Lemon", 260000],
+        ["Foul with Tahini", 260000],
+        ["Habb with Lemon", 260000],
+        ["Habb with Tahini", 260000],
+        ["Mashed Hummus", 260000]
+      ]
+    };
+    function renderMenu() {
+      const container = document.getElementById("menu-container");
+      container.innerHTML = "";
+      for (const [section, items] of Object.entries(menuData)) {
+        const sectionTitle = document.createElement("h2");
+        sectionTitle.id = section;
+        sectionTitle.textContent = section;
+        container.appendChild(sectionTitle);
+        items.forEach(([name, price]) => {
+          const div = document.createElement("div");
+          div.className = "menu-item";
+          const priceText = showUSD
+            ? `${(price / exchangeRate).toFixed(2)} $`
+            : `${price.toLocaleString()} L.L.`;
+          div.innerHTML = `<span>${name}</span><span>${priceText}</span>`;
+          container.appendChild(div);
+        });
+      }
+      document.getElementById("currency-btn").textContent = showUSD ? "Show in L.L." : "Show in USD";
+    }
+    function toggleCurrency() {
+      showUSD = !showUSD;
+      renderMenu();
+    }
+  </script>
+</head>
+<body onload="renderMenu()">
+  <div class="top-container">
+    <header>
+      <img src="C:\Users\zios\Desktop\Aljoud\IMG_1684 (1).PNG" alt="Al Joud Logo" class="logo">
+      <div class="title">Al-Joud Restaurant</div>
+    </header>
+    <div class="toolbar">
+      <button onclick="document.getElementById('Glass Plate').scrollIntoView({ behavior: 'smooth' })">Glass Plate</button>
+      <button onclick="document.getElementById('Takeaway Plate').scrollIntoView({ behavior: 'smooth' })">Takeaway Plate</button>
+      <button onclick="document.getElementById('Quarter Kilo').scrollIntoView({ behavior: 'smooth' })">Quarter Kilo</button>
+      <button onclick="document.getElementById('Half Kilo').scrollIntoView({ behavior: 'smooth' })">Half Kilo</button>
+      <button onclick="document.getElementById('Kilo').scrollIntoView({ behavior: 'smooth' })">Kilo</button>
+      <button onclick="toggleCurrency()" id="currency-btn">Show in L.L.</button>
+      <button onclick="window.location.href='arabic.html'">العربية</button>
+    </div>
+  </div>
+  <div id="menu-container" class="menu-section"></div>
+  
+   <div class="contact-section">
+    <h3>Scan Our QR Codes</h3>
+    <div class="qr-codes">
+      <img src="C:\Users\zios\Desktop\Aljoud\qr-code (1).png" alt="WhatsApp QR">
+      <img src="C:\Users\zios\Desktop\Aljoud\qr-code.png" alt="Instagram QR">
+    </div>
+  </div>
+
+</body>
+</html>
